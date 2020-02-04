@@ -30,9 +30,11 @@ std::string colorize(std::string text)
 
 
 int main() { 
-  Color red(255,0,0);
-  Color green(0,255,0);
-  Color blue(0,0,255);
+Color red(255,0,0);
+Color green(0,255,0);
+Color blue(0,0,255);
+
+  int r, g, b;
 red.to_string();
 green.to_string();
 blue.to_string();
@@ -40,5 +42,15 @@ blue.to_string();
 std::cout << red.colorize("Red") << std::endl;
 std::cout << green.colorize("Green") << std::endl;
 std::cout << blue.colorize("Blue") << std::endl;
-//std::cout<< red.to_string(red)<<std::endl;
+
+std::cout << "Please enter 3 integer values representing red, green, blue (spaces inbetween): ";
+std::cin>>r>>g>>b;
+std::string output = "(" + std::to_string(r) + "," + std::to_string(g) + "," + std::to_string(b) + ")";
+
+//std::cout<< output<<std::endl;
+
+Color color(r,g,b);
+color.to_string();
+std::cout << color.colorize(output) << std::endl;
+
 }
