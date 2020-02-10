@@ -1,26 +1,34 @@
 #include "color.h"
 
 std::string Color::to_string() const {
-  rainbow = std::to_string(red) + ";" + std::to_string(green) + ";" + std::to_string(blue);
+  std::string rainbow;
+  rainbow = std::to_string(Red) + ";" + std::to_string(Green) + ";" + std::to_string(Blue);
   return rainbow;
 };
-
 //function takes colors and seperates with semicolons, returns rainbow
 
-//void Color::colorize(std::string rainbow2, std::string text) {
- // std::cout << "\033[38;2;" + rainbow2 + ";177m" << text << "\033[0m" << std::endl;
-//};
+std::string Color::print_string() const {
+  std::string rainbow;
+  rainbow = "(" + std::to_string(Red) + "," + std::to_string(Green) + "," + std::to_string(Blue) + ")";
+  return rainbow;
+};
+//if reset is true use end line, if false use begining of line
+//using color class like operaroor
 
-std:: ostream& operator<<(ostream& ost, const Color& color) {
-  ost color.to_string();
+//std:: is class in std lib, ostream is what is grabbed from lib
+std::ostream & operator << (std::ostream & ost, const Color & color) {
+  if (color.reset == true) {
+    ost << "\033[0m";
+    //use end of line
+  } else if (color.reset == false) {
+    ost << "\033[38;2;" << color.to_string() << ";177m";
+  }
   return ost;
-//do I need to tell the program to stream out ANSI escape code as I did in "\033[38;2;" + rainbow2 + ";177m" << text << "\033[0m"??
 }
-//where do I put the cout of 38;2;" +red green blue +etc..? is this the cout of ost?
 
-std:: istream& operator>>(std::istream& ist, Color& color) {
-  int red, green, blue;
-  if (ist >> red >> green >> blue) color = Color(red, green, blue);
+std::istream & operator >> (std::istream & ist, Color & color) {
+  int r, g, b;
+  if (ist >> r >> g >> b)
+    color = Color {r, g, b};
   return ist;
 }
-//no return, passes rainbow and text as it is used in function
