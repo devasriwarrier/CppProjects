@@ -7,9 +7,9 @@ int main()
   Color blue{0, 0, 255}; //passing nums sets reset to false bc of way this color constructor is made
   Color grey{}; //default const
 //color objects
-  std::string str_red = "Red is";
-  std::string str_green = "Green is";
-  std::string str_blue = "Blue is";
+  std::string str_red = "Ruby Red";
+  std::string str_green = "Great Green";
+  std::string str_blue = "Beautiful Blue";
 
   std::cout << red << str_red << std::endl; //std::cout << red goes to operator, and op func changes color to red
   std::cout << green << str_green << std::endl;
