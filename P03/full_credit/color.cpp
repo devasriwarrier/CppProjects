@@ -16,7 +16,7 @@ std::string Color::print_string() const {
 //using color class like operaroor
 
 //std:: is class in std lib, ostream is what is grabbed from lib
-std::ostream & operator << (std::ostream & ost, const Color & color) {
+std::ostream& operator << (std::ostream & ost, const Color & color) {
   if (color.reset == true) {
     ost << "\033[0m";
     //use end of line
@@ -28,7 +28,7 @@ std::ostream & operator << (std::ostream & ost, const Color & color) {
 
 std::istream & operator >> (std::istream & ist, Color & color) {
   int r, g, b;
-  if (ist >> r >> g >> b)
-    color = Color {r, g, b};
+  ist >> r >> g >> b);
+  color = Color {r, g, b};
   return ist;
 }
