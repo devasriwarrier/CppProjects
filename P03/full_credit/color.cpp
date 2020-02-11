@@ -28,7 +28,7 @@ std::ostream& operator << (std::ostream & ost, const Color & color) {
 
 std::istream & operator >> (std::istream & ist, Color & color) {
   int r, g, b;
-  ist >> r >> g >> b);
+  ist >> r >> g >> b;
   color = Color {r, g, b};
   return ist;
 }
