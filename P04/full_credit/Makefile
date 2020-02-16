@@ -10,4 +10,4 @@ coin.o: coin.cpp
 	$(CXX) $(CXXFLAGS) -c coin.cpp -o coin.o
 clean:
 	rm -f *.o *.gch ~* a.out coin
-	##I hope this is a correct and good makefile
+	##I hope this is a correct and good makefile???????????????????//
