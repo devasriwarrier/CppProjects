@@ -19,7 +19,8 @@ enum class Coin_size {PENNY, NICKEL, DIME, QUARTER};
 class Coin {
   public:
 
-  Coin(Coin_size _size, Year year); //constructor
+  Coin(Coin_size Size, Year Year, std::string* Notes): _size{Sed}, _year{Year}, _notes{nullptr} {
+  }; //constructor
 
   std::string Coin(const Coin& rhs) const;
 
@@ -35,7 +36,7 @@ class Coin {
   friend std::istream& operator>>(std::istream& ist, Coin& coin);
 
   private:
-  Coin_size _size;
+  std Coin_size _size;
   Year _year;
   std::string* _notes;
 };
