@@ -19,24 +19,21 @@ enum class Coin_size {PENNY, NICKEL, DIME, QUARTER};
 class Coin {
   public:
 
-  Coin(Coin_size Size, Year Year, std::string* Notes): _size{Sed}, _year{Year}, _notes{nullptr} {
-  }; //constructor
+  Coin(Coin_size Size, Year Yr);
 
-  std::string Coin(const Coin& rhs) const;
-
-  Coin& Coin::operator = (const Coin& rhs) { //copy assignment
-    if (this != &rhs) _value = new int{*(rhs._value)};
-    return *this;
-  }
+  Coin(const Coin &rhs); //copy constructor
+  Coin_size Size();
+  Coin& operator = (const Coin& rhs); //copy assignment
 
   ~Coin(); //destructor
 
-  std::string add_note() const;
+  std::string add_note()const;
+
   friend std::ostream& operator<<(std::ostream& ost, const Coin& coin);
   friend std::istream& operator>>(std::istream& ist, Coin& coin);
 
   private:
-  std Coin_size _size;
+  Coin_size _size;
   Year _year;
   std::string* _notes;
 };
