@@ -2,10 +2,10 @@ CXXFLAGS = --std=c++17
 
 all: coin
 
-coin: main.o coin.o *.h
-	$(CXX) $(CXXFLAGS) main.o coin.o -o coin
-main.o: main.cpp
-	$(CXX) $(CXXFLAGS) -c main.cpp -o main.o
+coin: test.o coin.o *.h
+	$(CXX) $(CXXFLAGS) test.o coin.o -o coin
+test.o: test.cpp
+	$(CXX) $(CXXFLAGS) -c test.cpp -o test.o
 coin.o: coin.cpp
 	$(CXX) $(CXXFLAGS) -c coin.cpp -o coin.o
 clean:

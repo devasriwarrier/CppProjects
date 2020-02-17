@@ -2,51 +2,46 @@
 #include "logger.h"
 
 
-Coin(Coin_size Size, Year Yr): _size{Size}, _year{Yr}, _notes{nullptr} {
+Coin::Coin(Coin_size Size, Year Yr): _size{Size}, _year{Yr}, _notes{nullptr} {
+  std::cout <<"copy1 constructor" << std::endl;
   LOG("Coin::Coin");
 }; // non default constructor
 
-Coin(const Coin &rhs) : _size{rhs.Size()} _year{rhs.Year()} _notes = {new string{*(rhs._notes)}} {
+Coin::Coin(const Coin &rhs) : _size{rhs._size}, _year{rhs._year}, _notes{nullptr} {
+  std::cout <<"copy2 constructor" << std::endl;
 LOG("Coin::Coin copy constructor");
 }; //copy constructor
 
 
-Coin& operator = (const Coin& rhs) {
+Coin& Coin::operator = (const Coin& rhs) {
   //copy assignment
-  if (this != &rhs) _size = new Coin_size{*(rhs.Size())} _year = new Year{*(rhs.Year())LOG("Coin::operator=")};
+  if (this != &rhs) {
+    _size = rhs._size;
+   _year = rhs._year;
+  std::cout <<"copyassign constructor" << std::endl;
+   LOG("Coin::operator=");
+ }
   return *this;
 };
 
-Coin_size Size() {return _size;};
-Year Year() {return _year;}; //add in h file
 
-Coin::~Coin() {delete _notes}LOG("Coin::~Coin"); //destructorssss
+Coin::~Coin() {
+  std::cout <<"delete constructor" << std::endl;
+if(_notes){
+delete _notes;
+}
 
-std::string add_note() {
-  if (!_notes) _notes = new string;
+LOG("Coin::~Coin"); 
+};//destructors
+
+void Coin::add_note(std::string s) {
+  std::cout <<"addnotes" << std::endl;
+  if (!_notes) _notes = new std::string;
+  *_notes += s;
 };
 
-std::ostream& operator << (std::ostream & ost, const Coin & coin) {
-  if (coin._size == .01) { //sets boolean to true, == does it twice so bad practice
-    ost << coin._year << " " << coin._size <<\n << coin._notes;
-  } else if (coin._size == .05) {
-  ost << coin._year << " " << coin._size <<\n << coin._notes;
-  }
-  else if (coin._size == .1) {
-  ost << coin._year << " " << coin._size <<\n << coin._notes;
-  }
-  else if (coin._size == .25) {
-  ost << coin._year << " " << coin._size <<\n << coin._notes;
-  }
-  else {
-    std::cout << "program doesnt like that"<< std::endl;
-  };
-  return ost;
-}
-
-std::istream & operator >> (std::istream & ist, Coin & coin) {
-  int y, s, h;
-  ist >> s >> y >> h;
-  coin = Coin {s, y, h};
-  return ist;
-}
+//std::ostream& operator <<(std::ostream& ost, const Coin & coin){
+//ost << coin._year << " " << coin._size << std::endl;
+//ost << coin._notes;
+//return ost;
+//};

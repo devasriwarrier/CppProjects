@@ -15,19 +15,29 @@ memory
 
 
 enum class Coin_size {PENNY, NICKEL, DIME, QUARTER};
-
+/*std::ostream& operator <<(std::ostream& ost, Coin_size & c){
+if(c == Coin_size::PENNY) {
+ost << "Penny";
+}
+else {
+ost << "test";
+}
+return ost;
+};
+*/
+typedef int Year;
 class Coin {
   public:
 
   Coin(Coin_size Size, Year Yr);
 
   Coin(const Coin &rhs); //copy constructor
-  Coin_size Size();
+
   Coin& operator = (const Coin& rhs); //copy assignment
 
   ~Coin(); //destructor
 
-  std::string add_note()const;
+  void add_note(std::string s);
 
   friend std::ostream& operator<<(std::ostream& ost, const Coin& coin);
   friend std::istream& operator>>(std::istream& ist, Coin& coin);
