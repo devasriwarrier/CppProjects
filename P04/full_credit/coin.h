@@ -2,6 +2,7 @@
 #define COIN_H
 
 #include <iostream>
+#include "logger.h"
 #include <string>
 /*when your class allocates memory from the
 heap, keeping a pointer to its address
@@ -15,16 +16,7 @@ memory
 
 
 enum class Coin_size {PENNY, NICKEL, DIME, QUARTER};
-/*std::ostream& operator <<(std::ostream& ost, Coin_size & c){
-if(c == Coin_size::PENNY) {
-ost << "Penny";
-}
-else {
-ost << "test";
-}
-return ost;
-};
-*/
+
 typedef int Year;
 class Coin {
   public:
