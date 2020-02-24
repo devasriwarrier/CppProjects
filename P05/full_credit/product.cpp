@@ -4,9 +4,9 @@
 
 
 Product::Product(std::string Name, double Cost): _name{Name}, _cost{Cost}, _quantity{0} {
-//  if(_cost =< -.01){
-    //runtime error in cpp
-  //}
+ if(_cost <= -.01){
+   throw std::runtime_error{"Invalid, cost cannot be negative"};
+ } 
 };
 
 Product::~Product() {
