@@ -55,14 +55,14 @@ int main()
       cart.push_back(&cheese);
       break;
     }
-  std::cout << "Current Order: \n -------------\n";
-  //Taxed::Taxed item;
+  std::cout << "Current Order: \n -------------\n" << product;
+
   //std::cout << ost << std::endl; //not sure?
   //  std:: cout << "Total price:" << poptart.price()  << std::endl; do this with overload
 //operator overload of vector... it is objec t
 float ordertotal = 0;
-for (auto &it: (cart)){
-std::cout <<it;
+for (auto const&it: cart){
+std::cout << it <<" ";
 ordertotal += it->price();
 }
 std::cout << "HELLLOOOOO";
