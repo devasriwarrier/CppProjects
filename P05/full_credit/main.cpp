@@ -27,7 +27,13 @@ int main()
     std::cout << "5) Bread ($1.99)\n";
     std::cout << "6) Cheese ($0.99)\n";
     std::cout << "Enter quantity (0 to exit) and product index:\n\n";
-    std::cin >> quantity, index;
+
+    std::cin >> quantity >> index;
+
+    std::cout << "quantity is: " <<quantity << "\n";
+    std::cout << "index is: " <<index << "\n";
+
+//2 options: 1.
     switch (index)
     {
       case 1:
@@ -55,19 +61,17 @@ int main()
       cart.push_back(&cheese);
       break;
     }
-  std::cout << "Current Order: \n -------------\n" << product;
-
-  //std::cout << ost << std::endl; //not sure?
-  //  std:: cout << "Total price:" << poptart.price()  << std::endl; do this with overload
-//operator overload of vector... it is objec t
-float ordertotal = 0;
-for (auto const&it: cart){
-std::cout << it <<" ";
-ordertotal += it->price();
-}
-std::cout << "HELLLOOOOO";
-std::cout << ordertotal << "\n";
+  std::cout << "Current Order: \n -------------\n";
+  float ordertotal = 0;
+  for (std::vector<Product*>::iterator it = cart.begin(); it != cart.end(); ++it) {
+    std::cout << **it << "\n";
+    ordertotal += (*it)->price();
   }
+
+std::cout << "Total price: " << "$" << ordertotal << "\n";
+
+  }
+
 
   return 0;
 }
