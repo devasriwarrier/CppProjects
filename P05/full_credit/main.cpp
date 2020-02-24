@@ -12,7 +12,7 @@ int main()
   Taxfree milk{"Milk", 2.85};
   Taxfree bread{"Bread", 1.99};
   Taxfree cheese{"Cheese", 0.99};
-//tax and taxfree objects
+
   int quantity;
   int index;
   std::vector <Product*> cart;
@@ -33,7 +33,15 @@ int main()
     std::cout << "quantity is: " <<quantity << "\n";
     std::cout << "index is: " <<index << "\n";
 
-//2 options: 1.
+if (quantity <= -1 || index >= 7) {
+  try {
+		 throw std::runtime_error{"Invalid entry! Quantity cannot be negative, OR index cannot be more than program specified."};
+	}
+	  catch (std::exception &e) {
+		std::cout<<"Caught exception: "<<e.what()<<"\n";
+	}
+}
+else{
     switch (index)
     {
       case 1:
@@ -61,17 +69,15 @@ int main()
       cart.push_back(&cheese);
       break;
     }
+  }
   std::cout << "Current Order: \n -------------\n";
-  float ordertotal = 0;
-  for (std::vector<Product*>::iterator it = cart.begin(); it != cart.end(); ++it) {
-    std::cout << **it << "\n";
-    ordertotal += (*it)->price();
-  }
+  double ordertotal = 0;
+    for (std::vector<Product*>::iterator it = cart.begin(); it != cart.end(); ++it) {
+      std::cout << **it << "\n";
+      ordertotal += (*it)->price();
+    }
 
-std::cout << "Total price: " << "$" << ordertotal << "\n";
-
-  }
-
-
+  std::cout << "Total price: " << "$" << ordertotal << "\n";
+}
   return 0;
 }
