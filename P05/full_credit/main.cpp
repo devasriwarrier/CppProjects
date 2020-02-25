@@ -30,8 +30,8 @@ int main()
 
     std::cin >> quantity >> index;
 
-    std::cout << "quantity is: " <<quantity << "\n";
-    std::cout << "index is: " <<index << "\n";
+    //std::cout << "quantity is: " <<quantity << "\n";
+    //std::cout << "index is: " <<index << "\n";
 
 if (quantity <= -1 || index >= 7) {
   try {
