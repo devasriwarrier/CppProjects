@@ -9,9 +9,15 @@ Order:: Order(Customer& customer): customer{customer}
 {};
 
 std::ostream& operator << (std::ostream &ost, const Order& order) {
-for (auto i = order._products.begin(); i != order._products.end(); ++i)
+    ost << "Customer: " << order.customer;
+    for(auto p : order._products) ost << "\n  " << *p;
+    ost << "\nTotal price: $" << order.price();
+    return ost;
+
+/*for (auto i = order._products.begin(); i != order._products.end(); ++i)
     ost << *i;
   return ost;
+*/
 };
 
 Order::~Order(){};
@@ -21,12 +27,8 @@ _products.push_back(&desktop);
 return _products.size()-1;
 }; 
 
-double Order::price(){
-  double totalprice = 0.0;
- 
-  //for( int i=0; i<_products.size(); i++) {
- // Desktop& d = _products[i];
- // totalprice += d.price();
- // }
- return totalprice;
-};
+double Order::price() const {
+    double pr = 0;
+    for(auto p : _products) pr += p->price();
+    return pr;
+}

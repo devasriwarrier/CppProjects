@@ -12,11 +12,12 @@ class Order {
 
   friend std::ostream& operator<<(std::ostream& ost, const Order& order);
 
+
   ~Order(); // destructor
 
   int add_product(Desktop& desktop);
 
-  double price();
+  double price() const;
 
 private:
   Customer& customer; 

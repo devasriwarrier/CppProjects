@@ -13,7 +13,7 @@ class Options {
   friend std::ostream& operator<<(std::ostream& ost, const Options& option);
 
   ~Options();
-  std::string to_string();
+  virtual std::string to_string() const;
 
   double cost();
 

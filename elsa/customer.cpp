@@ -9,6 +9,6 @@ Customer::Customer(std::string Name, std::string Phone, std::string Email): _nam
 {};
 
 std::ostream& operator << (std::ostream & ost, const Customer& customer) {
-   ost << customer._name << customer._phone << customer._email; 
+   ost << customer._name <<"("<< customer._phone <<"," << customer._email <<")"; 
   return ost;
 }
