@@ -9,10 +9,10 @@ Mainwin::Mainwin() : store{nullptr} {
     
     // /////////////////
     // G U I   S E T U P
-    // /////////////////
+
     store = new Store();
     set_default_size(400, 200);
-    set_title("ELSA!!!!!!!!!!");
+    set_title("ELSA SUPER COMPUTER");
     msg = Gtk::manage(new Gtk::Label());
     data = Gtk::manage(new Gtk::Label());
     // Put a vertical box container as the Window contents
@@ -139,20 +139,22 @@ return (dialog.get_text()).c_str();
 };
 
 double Mainwin::get_double(std::string prompt){
-    EntryDialog dialog(*this, "Test");
+    EntryDialog dialog(*this, "??");
     dialog.set_text(prompt);
     dialog.run();
     return std::stoi((dialog.get_text()));
 };
 
 int Mainwin::get_int(std::string prompt){
-    EntryDialog dialog(*this, "Test");
+    EntryDialog dialog(*this, "Order/Desktop");
     dialog.set_text(prompt);
     dialog.run();
     return std::stoi((dialog.get_text()));
 };
 void Mainwin::set_data(std::string s){
+std::ostringstream oss;
 data->set_text(s);
+oss.str();
 };
 void Mainwin::set_msg(std::string s){
 msg->set_text(s);
@@ -168,7 +170,7 @@ void Mainwin::on_quit_click() { close(); }
 void Mainwin::on_about_click() {
     Gtk::AboutDialog dialog;
     dialog.set_transient_for(*this); // Avoid the discouraging warning
-    dialog.set_program_name("hi");
+    dialog.set_program_name("The ELSA Application");
    // auto logo = Gdk::Pixbuf::create_from_file("128px-Pyramidal_matches.png");
    // dialog.set_logo(logo);
     dialog.set_version("Version 1.2.1");
@@ -186,18 +188,25 @@ void Mainwin::on_about_click() {
 void Mainwin::on_view_customer_click() {
 std::ostringstream oss;
 Glib::ustring s = R"(
-<span size='24000' weight='bold'>Customers:</span>)";
- //for(int i=0; i < store->num_customers(); ++i) {
- //oss << i << ") " << store->customer(i) << "\n";
- //std::string s = oss.str();
-//}
+<span size='20000' weight='bold'>Customers:</span>)";
+ for(int i=0; i < store->num_customers(); ++i) {
+ oss << i << ") " << store->customer(i) << "\n";
+ std:: string s = oss.str();
+ std::cout << s;
+}
  msg->set_markup(s);
 };
 void Mainwin::on_view_peripheral_click() {
-/*
-for(int i=0; i<store.num_options(); ++i) 
-std::cout << i << ") " << store.option(i) << "\n"
-*/
+std::ostringstream oss;
+Glib::ustring s = R"(
+<span size='20000' weight='bold'>Peripherals::</span>)";
+for(int i=0; i<store->num_options(); ++i) {
+oss << i << ") " << store->option(i) << "\n";
+ std:: string s = oss.str();
+ std::cout << s;
+}
+ msg->set_markup(s);
+
 };  
 void Mainwin::on_view_desktop_click(){};
 void Mainwin::on_view_order_click(){};
@@ -208,7 +217,7 @@ std::string Phone = get_string("Customer phone (xxx-xxx-xxxx)? ");
 std::string Email = get_string("Customer email (xxx@domain.com)? ");
 Customer customer{Name, Phone, Email};
 store->add_customer(customer);
-//std::string s = oss.str();
+
 };
 
 void Mainwin::on_insert_peripheral_click(){
@@ -222,11 +231,11 @@ void Mainwin::on_insert_desktop_click(){
  int desktop = store->new_desktop();
 while(true) {
 int option;
-	for(int i=0; i<store->num_options(); ++i) 
-	int option = get_int("Add which peripheral?");
-	if(option == -1) break;
-	try {store->add_option(option, desktop);} 
-	catch(std::exception& e) {std::cerr << "#### INVALID OPTION ####\n\n";}
+for(int i=0; i<store->num_options(); ++i) 
+int option = get_int("Add which peripheral?");
+if(option == -1) break;
+try {store->add_option(option, desktop);} 
+catch(std::exception& e) {std::cerr << "#### INVALID OPTION ####\n\n";}
    }
 };
 void Mainwin::on_insert_order_click(){
