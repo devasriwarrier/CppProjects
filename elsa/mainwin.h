@@ -2,7 +2,9 @@
 #define __MAINWIN_H
 
 #include <gtkmm.h>
+#include <string>
 #include "store.h"
+#include "entrydialog.h"
 
 class Mainwin : public Gtk::Window {
     public:

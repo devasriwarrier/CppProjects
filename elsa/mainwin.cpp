@@ -1,16 +1,20 @@
 #include "mainwin.h"
 #include "entrydialog.h"
-#include <iostream> // for std::cerr logging
+#include "store.h"
+#include <iostream> 
+#include <sstream>
+#include <iomanip>
 
 Mainwin::Mainwin() : store{nullptr} {
-
+    
     // /////////////////
     // G U I   S E T U P
     // /////////////////
-
+    store = new Store();
     set_default_size(400, 200);
     set_title("ELSA!!!!!!!!!!");
-
+    msg = Gtk::manage(new Gtk::Label());
+    data = Gtk::manage(new Gtk::Label());
     // Put a vertical box container as the Window contents
     Gtk::Box *vbox = Gtk::manage(new Gtk::VBox);
     add(*vbox);
@@ -116,7 +120,7 @@ Mainwin::Mainwin() : store{nullptr} {
     msg = Gtk::manage(new Gtk::Label());
     msg->set_hexpand(true);
     vbox->pack_start(*msg, Gtk::PACK_SHRINK, 0);
-    // vbox->add(*msg);
+     vbox->add(*msg);
 
     // Make the box and everything in it visible
     vbox->show_all();
@@ -125,6 +129,34 @@ Mainwin::Mainwin() : store{nullptr} {
 
 Mainwin::~Mainwin() { }
 
+
+//utilities
+std::string Mainwin::get_string(std::string prompt){
+EntryDialog dialog{*this, prompt, true};
+dialog.set_text(prompt);
+dialog.run();
+return (dialog.get_text()).c_str();
+};
+
+double Mainwin::get_double(std::string prompt){
+    EntryDialog dialog(*this, "Test");
+    dialog.set_text(prompt);
+    dialog.run();
+    return std::stoi((dialog.get_text()));
+};
+
+int Mainwin::get_int(std::string prompt){
+    EntryDialog dialog(*this, "Test");
+    dialog.set_text(prompt);
+    dialog.run();
+    return std::stoi((dialog.get_text()));
+};
+void Mainwin::set_data(std::string s){
+data->set_text(s);
+};
+void Mainwin::set_msg(std::string s){
+msg->set_text(s);
+};
 // /////////////////
 // C A L L B A C K S
 // /////////////////
@@ -137,37 +169,71 @@ void Mainwin::on_about_click() {
     Gtk::AboutDialog dialog;
     dialog.set_transient_for(*this); // Avoid the discouraging warning
     dialog.set_program_name("hi");
-    auto logo = Gdk::Pixbuf::create_from_file("128px-Pyramidal_matches.png");
-    dialog.set_logo(logo);
+   // auto logo = Gdk::Pixbuf::create_from_file("128px-Pyramidal_matches.png");
+   // dialog.set_logo(logo);
     dialog.set_version("Version 1.2.1");
-    dialog.set_copyright("Copyright 2017-2020");
+    dialog.set_copyright("Copyright 2020");
     dialog.set_license_type(Gtk::License::LICENSE_GPL_3_0);
-    std::vector< Glib::ustring > authors = {"George F. Rice"};
+    std::vector< Glib::ustring > authors = {"Devasri Warrier"};
     dialog.set_authors(authors);
     std::vector< Glib::ustring > artists = {
-        "Logo by M0tty, licensed under CC BY-SA 3.0 https://commons.wikimedia.org/wiki/File:Pyramidal_matches.svg",
-        "Robot by FreePik.com, licensed for personal and commercial purposes with attribution https://www.freepik.com/free-vector/grey-robot-silhouettes_714902.htm"};
+        "No LOGO in this  sprint..next one"
+        "no image yet"};
     dialog.set_artists(artists);
     dialog.run();
 }
 
-void Mainwin::on_view_customer_click() {};
-void Mainwin::on_view_peripheral_click() {};  
+void Mainwin::on_view_customer_click() {
+std::ostringstream oss;
+Glib::ustring s = R"(
+<span size='24000' weight='bold'>Customers:</span>)";
+ //for(int i=0; i < store->num_customers(); ++i) {
+ //oss << i << ") " << store->customer(i) << "\n";
+ //std::string s = oss.str();
+//}
+ msg->set_markup(s);
+};
+void Mainwin::on_view_peripheral_click() {
+/*
+for(int i=0; i<store.num_options(); ++i) 
+std::cout << i << ") " << store.option(i) << "\n"
+*/
+};  
 void Mainwin::on_view_desktop_click(){};
 void Mainwin::on_view_order_click(){};
 
 void Mainwin::on_insert_customer_click(){
+std::string Name = get_string("Customer name?");
+std::string Phone = get_string("Customer phone (xxx-xxx-xxxx)? ");
+std::string Email = get_string("Customer email (xxx@domain.com)? ");
+Customer customer{Name, Phone, Email};
+store->add_customer(customer);
+//std::string s = oss.str();
 };
 
-void Mainwin::on_insert_peripheral_click(){};
-void Mainwin::on_insert_desktop_click(){};
-void Mainwin::on_insert_order_click(){}
+void Mainwin::on_insert_peripheral_click(){
+std::string s = get_string ("Name of new peripheral? ");
+std::string _cost = get_string("Cost? ");
+double cost = atof(_cost.c_str());
+Options option{s, cost};
+store->add_option(option);
+};
+void Mainwin::on_insert_desktop_click(){
+ int desktop = store->new_desktop();
+while(true) {
+int option;
+	for(int i=0; i<store->num_options(); ++i) 
+	int option = get_int("Add which peripheral?");
+	if(option == -1) break;
+	try {store->add_option(option, desktop);} 
+	catch(std::exception& e) {std::cerr << "#### INVALID OPTION ####\n\n";}
+   }
+};
+void Mainwin::on_insert_order_click(){
+	int customer = get_int("Customer");
+	int order = store->new_order(customer);
+};
 
-// /////////////////
-// U T I L I T I E S
-// /////////////////
 
-    // Display the collected status on the status bar
-   // msg->set_markup(s);
 
 
