@@ -27,10 +27,15 @@ class Mainwin : public Gtk::Window {
 	void set_data(std::string s);
 	void set_msg(std::string s);
 
+       // void on_open_click();
+	//void on_save_click(){};
+	//void on_save_as_click();
 
     private:
         Store *store;                      
         Gtk::Label *data;                        
-        Gtk::Label *msg;                       
+        Gtk::Label *msg; 
+	std::string filename;
+	                      
 };
 #endif 

@@ -15,6 +15,11 @@ class Desktop {
 
   double price();
 
+
+	Desktop(std::ostream&);
+
+	void Save(std::ostream&);
+
 private:
   std::vector <Options*> options; 
 };

@@ -28,6 +28,10 @@ class Store {
   int num_orders();
   Order& order(int index);
 
+	Store(std::ostream&);
+
+	void Save(std::ostream&);
+
 
 private:
   std::vector<Customer> customers; 

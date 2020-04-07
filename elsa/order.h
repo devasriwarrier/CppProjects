@@ -19,6 +19,11 @@ class Order {
 
   double price() const;
 
+	Order(std::ostream&);
+
+	void Save(std::ostream&);
+
+
 private:
   Customer& customer; 
   std::vector<Desktop*> _products;

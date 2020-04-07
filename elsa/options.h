@@ -17,6 +17,11 @@ class Options {
 
   double cost();
 
+	Options(std::ostream&);
+
+	void Save(std::ostream&);
+
+
 protected:
   std::string _name; 
   double _cost; 
