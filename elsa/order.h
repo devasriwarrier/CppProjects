@@ -1,9 +1,7 @@
 #ifndef ORDER_H
 #define ORDER_H
 
-#include <iostream>
-#include <string>
-#include <vector>
+#include "customer.h"
 #include "desktop.h"
 
 class Order {
@@ -13,20 +11,22 @@ class Order {
   friend std::ostream& operator<<(std::ostream& ost, const Order& order);
 
 
-  ~Order(); // destructor
+  virtual ~Order(); // destructor
 
   int add_product(Desktop& desktop);
 
   double price() const;
 
-	Order(std::ostream&);
+  Order(std::istream& ist);
+  void save(std::ostream& ost);
 
-	void Save(std::ostream&);
+
 
 
 private:
-  Customer& customer; 
+  Customer* customer; 
   std::vector<Desktop*> _products;
 };
 
 #endif
+

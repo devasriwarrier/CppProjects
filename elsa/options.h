@@ -13,14 +13,14 @@ class Options {
   friend std::ostream& operator<<(std::ostream& ost, const Options& option);
 
   ~Options();
+
   virtual std::string to_string() const;
 
   double cost();
 
-	Options(std::ostream&);
+Options(std::istream& ist);    
 
-	void Save(std::ostream&);
-
+virtual void save(std::ostream& ost);  
 
 protected:
   std::string _name; 

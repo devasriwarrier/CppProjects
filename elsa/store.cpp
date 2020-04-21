@@ -1,9 +1,9 @@
- #include "customer.h"
-#include "order.h"
+#include "store.h"
 #include "desktop.h"
 #include "options.h"
-#include "store.h"
-#include <vector>
+#include "customer.h"
+#include "order.h"
+
 
   void Store::add_customer(Customer& customer){
   customers.push_back(customer);
@@ -78,3 +78,54 @@
 //^^work exactly like num_customers and customer, enabling a 3-term for loop that iterates over each vector element.
   
   
+void Store::save(std::ostream& ost) {
+    ost << ELSA_COOKIE << "\n";
+    ost << ELSA_FILE_VERSION << "\n";
+
+    ost << customers.size() << '\n';  
+    for(auto c : customers) c.save(ost);
+
+    ost << options.size() << '\n';
+    for(auto o : options) o->save(ost);
+
+    ost << desktops.size() << '\n';
+    for(auto d : desktops) d.save(ost);
+
+    ost << orders.size() << '\n';
+    for(auto o : orders) o.save(ost);
+
+    ost << ram.size() << '\n';
+    for(auto o : ram) o.save(ost); //dont know about this
+}
+
+Store::Store(){}
+Store::Store(std::istream& ist) {
+
+    std::string s;
+    int vsize;
+
+    ist >> vsize; ist.ignore(32767, '\n');
+    while(vsize--) orders.push_back(Order{ist});
+    if(!ist) throw std::runtime_error{"Bad Data"};
+
+    ist >> vsize; ist.ignore(32767, '\n');
+    while(vsize--) customers.push_back(Customer{ist});
+    if(!ist) throw std::runtime_error{"Bad Data"};
+
+    ist >> vsize; ist.ignore(32767, '\n');
+    while(vsize--) desktops.push_back(Desktop{ist});
+    if(!ist) throw std::runtime_error{"Bad Data"};
+
+    ist >> vsize; ist.ignore(32767, '\n');
+    while(vsize--) options.push_back(new Options{ist});
+    if(!ist) throw std::runtime_error{"Bad Data"};
+
+    ist >> vsize; ist.ignore(32767, '\n');
+    while(vsize--) options.push_back(new Options{ist});
+    if(!ist) throw std::runtime_error{"Bad Options Data"};
+
+    ist >> vsize; ist.ignore(32767, '\n');
+    while(vsize--) ram.push_back(new Ram{ist});
+    if(!ist) throw std::runtime_error{"Bad Ram Data"}; //not sure
+
+}

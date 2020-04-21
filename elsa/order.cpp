@@ -5,8 +5,9 @@
 #include "store.h"
 #include <vector>
 
-Order:: Order(Customer& customer): customer{customer}
-{};
+Order::Order(Customer& customer): customer{&customer} {}
+
+Order::~Order(){};
 
 std::ostream& operator << (std::ostream &ost, const Order& order) {
     ost << "Customer: " << order.customer;
@@ -20,7 +21,11 @@ std::ostream& operator << (std::ostream &ost, const Order& order) {
 */
 };
 
-Order::~Order(){};
+void Order::save(std::ostream& ost) {
+    customer->save(ost);
+    ost << _products.size() << '\n';
+    for (auto p : _products) p->save(ost);
+}
 
 int Order::add_product(Desktop& desktop){
 _products.push_back(&desktop);
@@ -32,3 +37,13 @@ double Order::price() const {
     for(auto p : _products) pr += p->price();
     return pr;
 }
+
+
+Order::Order(std::istream& ist) {
+    customer = new Customer{ist};
+    int vsize;
+    ist >> vsize; ist.ignore(32767, '\n');
+    while(vsize--) _products.push_back(new Desktop{ist});
+}
+
+

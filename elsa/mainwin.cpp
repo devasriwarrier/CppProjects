@@ -1,21 +1,28 @@
 #include "mainwin.h"
 #include "entrydialog.h"
+#include <fstream>
 #include <sstream>
 #include <iomanip>
 
-Mainwin::Mainwin(): store {new Store} {
+Mainwin::Mainwin(): store{nullptr}{
   // G U I   S E T U P
 
-filename = "untitled.elsa";
+//filename = "untitled.elsa";
 
   set_default_size(900, 700);
   set_title("ELSA SUPER COMPUTER");
-  msg = Gtk::manage(new Gtk::Label());
-  data = Gtk::manage(new Gtk::Label());
+  //msg = Gtk::manage(new Gtk::Label());
+  //data = Gtk::manage(new Gtk::Label());
 
   // Put a vertical box container as the Window contents
   Gtk::Box *vbox = Gtk::manage(new Gtk::VBox);
   add( *vbox);
+
+ // T O O L B A R
+    // Add a toolbar to the vertical box below the menu
+    Gtk::Toolbar *toolbar = Gtk::manage(new Gtk::Toolbar);
+    vbox->pack_start(*toolbar, Gtk::PACK_SHRINK, 0);
+    // vbox->add(*toolbar);
 
   // M E N U
   // Add a menu bar as the top item in the vertical box
@@ -37,30 +44,32 @@ filename = "untitled.elsa";
   });
   filemenu->append(*menuitem_quit);
 
+ //N E W
+    // Append New to the File menu
+    Gtk::MenuItem *menuitem_new = Gtk::manage(new Gtk::MenuItem("_New Store", true));
+    menuitem_new->signal_activate().connect([this] {this->on_new_store_click();});
+    filemenu->append(*menuitem_new);
+
+
 
 //O P E N
   // Append OPEN to the File menu
   Gtk::MenuItem *menuitem_open = Gtk::manage(new Gtk::MenuItem("_Open", true));
-  menuitem_open->signal_activate().connect([this] {
-    this -> on_open_click();
-  });
+  menuitem_open->signal_activate().connect([this] {this -> on_open_click();});
   filemenu->append(*menuitem_open);
 
 //S A V E
   // Append SAVE to the File menu
   Gtk::MenuItem *menuitem_save = Gtk::manage(new Gtk::MenuItem("_Save", true));
-  menuitem_save->signal_activate().connect([this] {
-    this -> on_save_click();
-  });
+  menuitem_save->signal_activate().connect([this] {this -> on_save_click();});
   filemenu->append(*menuitem_save);
 
 //S A V E A S
   // Append Quit to the File menu
   Gtk::MenuItem *menuitem_save_as = Gtk::manage(new Gtk::MenuItem("Save as", true));
-  menuitem_save_as->signal_activate().connect([this] {
-    this -> on_save_as_click();
-  });
+  menuitem_save_as->signal_activate().connect([this] {this -> on_save_as_click();});
   filemenu->append(*menuitem_quit);
+
   //H E L P
   // Create a Help menu and add to the menu bar
   Gtk::MenuItem *menuitem_help = Gtk::manage(new Gtk::MenuItem("_Help", true));
@@ -183,11 +192,16 @@ filename = "untitled.elsa";
   msg = Gtk::manage(new Gtk::Label());
   msg -> set_hexpand(true);
   vbox -> pack_start( *msg, Gtk::PACK_SHRINK, 0);
-  vbox -> add( *msg);
+  //vbox -> add( *msg);
 
   // Make the box and everything in it visible
   vbox -> show_all();
+// Start with a new store
+    on_new_store_click();
+
 };
+
+
 
 Mainwin::~Mainwin() {}
 
@@ -204,7 +218,7 @@ std::string Mainwin::get_string(std::string prompt) {
 }
 
 double Mainwin::get_double(std::string prompt) {
-  EntryDialog dialog( *this, "??");
+  EntryDialog dialog( *this, "Cost");
   dialog.set_text(prompt);
   dialog.run();
   return std::stoi((dialog.get_text()));
@@ -229,6 +243,100 @@ void Mainwin::set_msg(std::string s) {
 // /////////////////
 // C A L L B A C K S
 // /////////////////
+
+void Mainwin::on_new_store_click() {
+    delete store;
+    store = new Store;
+    filename = "untitled.elsa";
+    set_data("");
+    set_msg("New store created");
+}
+
+void Mainwin::on_save_click() {
+    try {
+            std::ofstream ofs{filename};
+            store->save(ofs);
+            if(!ofs) throw std::runtime_error{"Error writing file"};
+            set_msg("Saved " + filename);
+    } catch(std::exception& e) {
+            std::string err = "Unable to save store to " + filename;
+            set_msg("<b>ERROR:</b> " + err);
+            Gtk::MessageDialog{*this, err, false, Gtk::MESSAGE_WARNING}.run();
+    }
+
+}
+
+void Mainwin::on_save_as_click() {
+    Gtk::FileChooserDialog dialog("Please choose a file",
+          Gtk::FileChooserAction::FILE_CHOOSER_ACTION_SAVE);
+    dialog.set_transient_for(*this);
+
+    auto filter_elsa = Gtk::FileFilter::create();
+    filter_elsa->set_name("ELSA files");
+    filter_elsa->add_pattern("*.elsa");
+    dialog.add_filter(filter_elsa);
+ 
+    auto filter_any = Gtk::FileFilter::create();
+    filter_any->set_name("Any files");
+    filter_any->add_pattern("*");
+    dialog.add_filter(filter_any);
+
+    dialog.set_filename(filename);
+
+    //Add response buttons the the dialog:
+    dialog.add_button("_Cancel", 0);
+    dialog.add_button("_Save", 1);
+
+    int result = dialog.run();
+
+    if (result == 1) {
+        filename = dialog.get_filename();
+        on_save_click();
+    }
+}
+//
+// The user wants to open a store from the filesystem
+//
+void Mainwin::on_open_click() {
+    Gtk::FileChooserDialog dialog("Please choose a file",
+          Gtk::FileChooserAction::FILE_CHOOSER_ACTION_OPEN);
+    dialog.set_transient_for(*this);
+
+    auto filter_elsa = Gtk::FileFilter::create();
+    filter_elsa->set_name("ELSA files");
+    filter_elsa->add_pattern("*.elsa");
+    dialog.add_filter(filter_elsa);
+ 
+    auto filter_any = Gtk::FileFilter::create();
+    filter_any->set_name("Any files");
+    filter_any->add_pattern("*");
+    dialog.add_filter(filter_any);
+
+    dialog.set_filename(filename);
+
+    //Add response buttons the the dialog:
+    dialog.add_button("_Cancel", 0);
+    dialog.add_button("_Open", 1);
+
+    int result = dialog.run();
+
+    if (result == 1) {
+        try {
+            delete store; store = nullptr;
+            filename = dialog.get_filename();
+            std::ifstream ifs{filename};
+            store = new Store{ifs};
+            if(!ifs) throw std::runtime_error{"Invalid file contents"};
+            on_view_customer_click();
+            set_msg("Loaded " + filename);
+        } catch (std::exception& e) {
+            std::string err = "Unable to open store from " + filename + " (" + e.what() + " )";
+            on_new_store_click();
+            set_msg("<b>ERROR:</b>: " + err);
+            Gtk::MessageDialog{*this, err, false, Gtk::MESSAGE_WARNING}.run();
+        }
+    }
+}
 
 void Mainwin::on_quit_click() {
   close();
@@ -311,29 +419,56 @@ void Mainwin::on_view_order_click() {
 }
 
 void Mainwin::on_insert_customer_click() {
-  std::string Name = get_string("Customer name?");
-  if (Name.size()) {
-    std::string Phone = get_string("Customer phone (xxx-xxx-xxxx)? ");
-    std::string Email = get_string("Customer email (xxx@domain.com)? ");
-    Customer customer {
-      Name,
-      Phone,
-      Email
-    };
-    store -> add_customer(customer);
-  }
-  on_view_customer_click();
-  set_msg("Added customer " + Name);
+	Gtk::Dialog dialog{"Insert Customer", *this};
+	Gtk::Grid grid;
+	Gtk::Label t_name{"Name"};
+	Gtk::Entry e_name;
+	grid.attach(t_name, 0, 0, 1, 1);
+	grid.attach(e_name, 1, 0, 2, 1);
+
+	Gtk::Label a_name{"Phone"};
+	Gtk::Entry b_name;
+	grid.attach(a_name, 0, 1, 1, 1);
+	grid.attach(b_name, 1, 1, 2, 1);
+
+	Gtk::Label c_name{"Email"};
+	Gtk::Entry d_name;
+	grid.attach(c_name, 0, 2, 1, 1);
+	grid.attach(d_name, 1, 3, 2, 1);
+
+	dialog.get_content_area()->add(grid);
+	dialog.add_button("Insert", Gtk::RESPONSE_OK);
+	dialog.add_button("Cancel", Gtk::RESPONSE_CANCEL);
+	dialog.show_all();
+	int response;
+while((response = dialog.run()) ==Gtk::RESPONSE_OK){
+if(e_name.get_text().size() == 0) {e_name.set_text("*REQUIRED*"); continue;}
+
+    std::string Name = e_name.get_text();
+    std::string Phone = b_name.get_text();
+    std::string Email = d_name.get_text();
+    Customer customer {Name, Phone, Email};
+    store->add_customer(customer);
+    on_view_customer_click();
+    set_msg("Added customer " + Name);
+}
+
 }
 
 void Mainwin::on_insert_peripheral_click() {
 
-  //std::string s = get_string ("Name of new peripheral? ");
-  //std::string _cost = get_string("Cost? ");
-  //double cost = atof(_cost.c_str());
-  //Options option{s, cost};
-  //store->add_option(option);
-  std::string peripheral = get_string("Name of new peripheral?");
+Gtk::Dialog dialog{"Insert Peripheral Type", *this};
+	Gtk::Grid grid;
+	Gtk::Label P_name{"Type"};
+	Gtk::Entry Pr_name;
+	grid.attach(P_name, 0, 0, 1, 1);
+	grid.attach(Pr_name, 1, 0, 2, 1);
+dialog.get_content_area()->add(grid);
+	dialog.add_button("Insert", Gtk::RESPONSE_OK);
+	dialog.show_all();
+	int response;
+while((response = dialog.run()) ==Gtk::RESPONSE_OK){
+  std::string peripheral = Pr_name.get_text();
   double cost = get_double("Cost?");
 
   Options option {peripheral,cost};
@@ -342,7 +477,7 @@ void Mainwin::on_insert_peripheral_click() {
   on_view_peripheral_click();
   set_msg("Added peripheral " + peripheral);
 }
-
+}
 void Mainwin::on_insert_desktop_click() {
     on_view_peripheral_click();
     int desktop = store -> new_desktop();
@@ -380,77 +515,4 @@ void Mainwin::on_insert_desktop_click() {
       set_msg("Added order " + std::to_string(order) + " for $" + std::to_string(store -> order(order).price()));
     }
 
-void Mainwin::on_save_click(){}
-
-
-
-void Mainwin::on_save_as_click() {
-    Gtk::FileChooserDialog dialog("Please choose a file",
-          Gtk::FileChooserAction::FILE_CHOOSER_ACTION_SAVE);
-    dialog.set_transient_for(*this);
-
-    auto filter_nim = Gtk::FileFilter::create();
-    filter_nim->set_name("NIM files");
-    filter_nim->add_pattern("*.nim");
-    dialog.add_filter(filter_nim);
- 
-    auto filter_any = Gtk::FileFilter::create();
-    filter_any->set_name("Any files");
-    filter_any->add_pattern("*");
-    dialog.add_filter(filter_any);
-
-    dialog.set_filename("untitled.nim");
-
-    //Add response buttons the the dialog:
-    dialog.add_button("_Cancel", 0);
-    dialog.add_button("_Save", 1);
-
-    int result = dialog.run();
-
-    if (result == 1) {
-       filename = dialog.get_filename();
-	on_save_click();
-    }
-}
-//
-// The user wants to open a drawing from the filesystem
-//
-void Mainwin::on_open_click() {
-    Gtk::FileChooserDialog dialog("Please choose a file",
-          Gtk::FileChooserAction::FILE_CHOOSER_ACTION_OPEN);
-    dialog.set_transient_for(*this);
-
-    auto filter_nim = Gtk::FileFilter::create();
-    filter_nim->set_name("NIM files");
-    filter_nim->add_pattern("*.nim");
-    dialog.add_filter(filter_nim);
- 
-    auto filter_any = Gtk::FileFilter::create();
-    filter_any->set_name("Any files");
-    filter_any->add_pattern("*");
-    dialog.add_filter(filter_any);
-
-    dialog.set_filename("untitled.nim");
-
-    //Add response buttons the the dialog:
-    dialog.add_button("_Cancel", 0);
-    dialog.add_button("_Open", 1);
-
-    int result = dialog.run();
-
-    if (result == 1) {
-        try {
-            delete nim;
-            std::ifstream ifs{dialog.get_filename()};
-            nim = new Nim{ifs};
-            bool b;
-            ifs >> b;
-            computer_player->set_active(b);
-            if(!ifs) throw std::runtime_error{"File contents bad"};
-            set_sticks();
-        } catch (std::exception& e) {
-            Gtk::MessageDialog{*this, "Unable to open game"}.run();
-        }
-    }
-}
 

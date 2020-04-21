@@ -1,27 +1,21 @@
-#ifndef DESKTOP_H
-#define DESKTOP_H
+#ifndef __DESKTOP_H
+#define __DESKTOP_H
 
-#include <iostream>
-#include <string>
-#include <vector>
 #include "options.h"
+#include <vector>
 
 class Desktop {
   public:
-  
-  void add_option(Options& option);
-
-  friend std::ostream& operator<<(std::ostream& ost, const Desktop& desktop);
-
-  double price();
-
-
-	Desktop(std::ostream&);
-
-	void Save(std::ostream&);
-
-private:
-  std::vector <Options*> options; 
+    Desktop();
+    void add_option(Options& option);
+    double price();
+    
+    Desktop(std::istream& ist);   
+    void save(std::ostream& ost); 
+    
+    friend std::ostream& operator<<(std::ostream& ost, const Desktop& desktop);
+  private:
+    std::vector<Options*> options;
 };
 
 #endif

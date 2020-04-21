@@ -11,6 +11,9 @@ class Customer {
 
   friend std::ostream& operator<<(std::ostream& ost, const Customer& customer);
 
+  Customer(std::istream& ist);   // Open
+
+  void save(std::ostream& ost);  // Save
 
 private:
   std::string _name; 
