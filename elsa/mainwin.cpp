@@ -4,6 +4,7 @@
 #include <sstream>
 #include <iomanip>
 
+//add sprint4 sheet!
 Mainwin::Mainwin(): store{nullptr}{
   // G U I   S E T U P
 
