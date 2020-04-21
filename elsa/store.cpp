@@ -94,8 +94,8 @@ void Store::save(std::ostream& ost) {
     ost << orders.size() << '\n';
     for(auto o : orders) o.save(ost);
 
-    ost << ram.size() << '\n';
-    for(auto o : ram) o.save(ost); //dont know about this
+   // ost << ram.size() << '\n';
+   // for(auto o : ram) o.save(ost); //dont know about this
 }
 
 Store::Store(){}
@@ -124,8 +124,8 @@ Store::Store(std::istream& ist) {
     while(vsize--) options.push_back(new Options{ist});
     if(!ist) throw std::runtime_error{"Bad Options Data"};
 
-    ist >> vsize; ist.ignore(32767, '\n');
-    while(vsize--) ram.push_back(new Ram{ist});
-    if(!ist) throw std::runtime_error{"Bad Ram Data"}; //not sure
+  //  ist >> vsize; ist.ignore(32767, '\n');
+  //  while(vsize--) ram.push_back(new Ram{ist});
+  //  if(!ist) throw std::runtime_error{"Bad Ram Data"}; //not sure
 
 }

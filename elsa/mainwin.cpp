@@ -19,11 +19,16 @@ Mainwin::Mainwin(): store{nullptr}{
   Gtk::Box *vbox = Gtk::manage(new Gtk::VBox);
   add( *vbox);
 
- // T O O L B A R
-    // Add a toolbar to the vertical box below the menu
-    Gtk::Toolbar *toolbar = Gtk::manage(new Gtk::Toolbar);
-    vbox->pack_start(*toolbar, Gtk::PACK_SHRINK, 0);
-    // vbox->add(*toolbar);
+//Gtk::GtkWidget *scrolled_window;
+
+//Gtk::scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+    
+//Gtk::container_set_border_width (GTK_CONTAINER (scrolled_window), 10);
+
+//Gtk::scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
+//                                    GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
+
+//    Gtk::ScrolledWindow_Class (scrolled_window);
 
   // M E N U
   // Add a menu bar as the top item in the vertical box
@@ -159,19 +164,55 @@ Mainwin::Mainwin(): store{nullptr}{
   });
   insertmenu -> append( *menuitem_insert_order);
 
-  //     Q U I T
-  // Push the quit botton all the way to the right by setting set_expand true
-  Gtk::SeparatorToolItem * sep = Gtk::manage(new Gtk::SeparatorToolItem());
-  sep -> set_expand(true);
 
-  // Add a icon for quitting
-  Gtk::ToolButton *quit_button = Gtk::manage(new Gtk::ToolButton(Gtk::Stock::QUIT));
-  quit_button -> set_tooltip_markup("Exit game");
-  quit_button -> signal_clicked().connect([this] {
-    this -> on_quit_click();
-  });
+// T O O L B A R
+    // Add a toolbar to the vertical box below the menu
+    Gtk::Toolbar *toolbar = Gtk::manage(new Gtk::Toolbar);
+    vbox->pack_start(*toolbar, Gtk::PACK_SHRINK, 0);
+    // vbox->add(*toolbar);
 
+//     Q U I T
+    // Push the quit botton all the way to the right by setting set_expand true
+    Gtk::SeparatorToolItem *sep = Gtk::manage(new Gtk::SeparatorToolItem());
+    sep->set_expand(true);
+    toolbar->append(*sep);
+
+    // Add a icon for quitting
+    Gtk::ToolButton *quit_button = Gtk::manage(new Gtk::ToolButton(Gtk::Stock::QUIT));
+    quit_button->set_tooltip_markup("Exit ELSA");
+    quit_button->signal_clicked().connect([this] {this->on_quit_click();});
+    toolbar->append(*quit_button);
+
+
+   // Gtk::Image* customer_image = Gtk::manage(new Gtk::Image{"C.png"});
+   // C = Gtk::manage(new Gtk::ToggleToolButton(*customer_image));
+   // C->set_tooltip_markup("Enable for Insert Customer");
+  //  C->signal_clicked().connect([this] {this->on_insert_customer_click();});
+   // toolbar->append(*C);
+
+//     N E W   S T O R E
+    // Add a new STORE icon
+    Gtk::ToolButton *new_store_button = Gtk::manage(new Gtk::ToolButton(Gtk::Stock::NEW));
+    new_store_button->set_tooltip_markup("Create a new store, discarding any in progress");
+    new_store_button->signal_clicked().connect([this] {this->on_new_store_click();});
+    toolbar->append(*new_store_button);
+
+//     TOOLBAR OPEN
+    // Add a new OPEN icon
+    Gtk::ToolButton *new_open_button = Gtk::manage(new Gtk::ToolButton(Gtk::Stock::OPEN));
+    new_open_button->set_tooltip_markup("Open a file");
+    new_open_button->signal_clicked().connect([this] {this->on_open_click();});
+    toolbar->append(*new_open_button);
+
+
+//     TOOLBAR SAVE
+    // Add a new OPEN icon
+    Gtk::ToolButton *new_save_button = Gtk::manage(new Gtk::ToolButton(Gtk::Stock::PRINT));
+    new_save_button->set_tooltip_markup("Save a file");
+    new_save_button->signal_clicked().connect([this] {this->on_save_as_click();});
+    toolbar->append(*new_save_button);
   // D A T A   D I S P L A Y
+
   // Provide a text entry box to show the remaining sticks
   data = Gtk::manage(new Gtk::Label {
     "",
@@ -205,6 +246,7 @@ Mainwin::Mainwin(): store{nullptr}{
 
 
 Mainwin::~Mainwin() {}
+
 
 //U T I L I T I E S
 
