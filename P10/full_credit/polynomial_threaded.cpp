@@ -61,6 +61,8 @@ void Polynomial::solve(double min, double max, int nthreads, double slices, doub
       double end = start + workPerThread;
 	m.lock();          
       threads.push_back(new std::thread{[start, end, nthreads, slicesPerThread, precision] { Polynomial f; f.solve_recursive(start, end, nthreads, slicesPerThread, precision);}});
+       // std::cout << std::hex << "Task " << c << " has ID " << threads.back()->get_id() << std::endl;
+
 
 //attempt 2
    // Polynomial& f = *this;
@@ -68,7 +70,7 @@ void Polynomial::solve(double min, double max, int nthreads, double slices, doub
 //attepmt 3
     //threads.push_back(new std::thread{[min, max, i, slices, precision] { Polynomial f; f.solve_recursive(min, end, i, slices, precision);}});
 	m.unlock();
-        std::cout << "Task " << i << " has start " << start << " has end "<< end << std::endl;
+        std::cout << std::hex << "Task " << i << " has start " << start << " has end "<< end << " has ID " << threads.back()->get_id() << std::endl; //output shows same ID.. why?
     }
 
     for (auto& t : threads) t->join();
