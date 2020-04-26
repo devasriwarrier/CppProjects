@@ -2,6 +2,9 @@
 #include <cmath>
 #include <thread>
 #include <vector>
+#include <mutex>
+
+std::mutex m;
 
 Polynomial::Polynomial() { }
 Polynomial::Polynomial(std::istream& ist) {
@@ -46,7 +49,6 @@ double Polynomial::operator()(double x) {
 
 void Polynomial::solve(double min, double max, int nthreads, double slices, double precision) {
     _roots = {};
-
     std::vector<std::thread*> threads;
 
     double range = max - min;
@@ -54,15 +56,18 @@ void Polynomial::solve(double min, double max, int nthreads, double slices, doub
     double slicesPerThread = slices/nthreads;
     for (int i = 0; i < nthreads; i++) {
 //attepmt 1
+	m.lock();          
       double start = min + (workPerThread * i);
-      double end = start + workPerThread ;
+      double end = start + workPerThread;
 
-      threads.push_back(new std::thread{[start, end, i, slicesPerThread, precision] { Polynomial f; f.solve_recursive(start, end, i, slicesPerThread, precision);}});
+      threads.push_back(new std::thread{[start, end, nthreads, slicesPerThread, precision] { Polynomial f; f.solve_recursive(start, end, nthreads, slicesPerThread, precision);}});
+
 //attempt 2
    // Polynomial& f = *this;
     //threads.push_back(new std::thread{&Polynomial::solve_recursive, f, start, end, i, slicesPerThread, precision});
 //attepmt 3
-    //threads.push_back(new std::thread{[min, max, i, slices, precision] { Polynomial f; f.solve_recursive(min, max, i, slices, precision);}});
+    //threads.push_back(new std::thread{[min, max, i, slices, precision] { Polynomial f; f.solve_recursive(min, end, i, slices, precision);}});
+	m.unlock();
         std::cout << "Task " << i << " has start " << start << " has end "<< end << std::endl;
     }
 
