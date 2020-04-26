@@ -56,13 +56,14 @@ void Polynomial::solve(double min, double max, int nthreads, double slices, doub
 //attepmt 1
       double start = min + (workPerThread * i);
       double end = start + workPerThread ;
-   // Polynomial& f = *this;
-    //attempt 3 threads.push_back(new std::thread{&Polynomial::solve_recursive, f, start, end, i, slicesPerThread, precision});
-      threads.push_back(new std::thread{[start, end, i, slicesPerThread, precision] { Polynomial f; f.solve_recursive(start, end, i, slicesPerThread, precision);}});
-        std::cout << "Task " << i << " has start " << start << " has end "<< end << std::endl;
 
-//attepmt 2
-    //  threads.push_back(new std::thread{[min, max, i, slices, precision] { Polynomial f; f.solve_recursive(min, max, i, slices, precision);}});
+      threads.push_back(new std::thread{[start, end, i, slicesPerThread, precision] { Polynomial f; f.solve_recursive(start, end, i, slicesPerThread, precision);}});
+//attempt 2
+   // Polynomial& f = *this;
+    //threads.push_back(new std::thread{&Polynomial::solve_recursive, f, start, end, i, slicesPerThread, precision});
+//attepmt 3
+    //threads.push_back(new std::thread{[min, max, i, slices, precision] { Polynomial f; f.solve_recursive(min, max, i, slices, precision);}});
+        std::cout << "Task " << i << " has start " << start << " has end "<< end << std::endl;
     }
 
     for (auto& t : threads) t->join();
