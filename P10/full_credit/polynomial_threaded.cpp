@@ -56,10 +56,10 @@ void Polynomial::solve(double min, double max, int nthreads, double slices, doub
     double slicesPerThread = slices/nthreads;
     for (int i = 0; i < nthreads; i++) {
 //attepmt 1
-	m.lock();          
+
       double start = min + (workPerThread * i);
       double end = start + workPerThread;
-
+	m.lock();          
       threads.push_back(new std::thread{[start, end, nthreads, slicesPerThread, precision] { Polynomial f; f.solve_recursive(start, end, nthreads, slicesPerThread, precision);}});
 
 //attempt 2
