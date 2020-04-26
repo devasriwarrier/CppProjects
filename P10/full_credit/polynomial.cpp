@@ -36,9 +36,9 @@ void Polynomial::solve_recursive(double min, double max, int tid, double slices,
 
     while(x1 < max) {
         y2 = f(x2);
-        if(std::signbit(y1) != std::signbit(y2)) {
+        if(std::signbit(y1) != std::signbit(y2)) { //
             if((abs(f(x1+x2)/2) > precision) && ((x2 - x1) > precision) && (recursions < 20)) {
-                solve_recursive(x1, x2, tid, std::min(slices, (x2-x1)/precision), precision, recursions+1); // recurse for more precision
+                solve_recursive(x1, x2, tid, std::min(slices, (x2-x1)/precision), precision, recursions+1); 
             } else {
                 _roots.push_back((x1+x2)/2);
             }
