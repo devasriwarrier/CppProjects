@@ -80,7 +80,7 @@ void Polynomial::solve_recursive(double min, double max, int tid, double slices,
                 solve_recursive(x1, x2, tid, std::min(slices, (x2-x1)/precision), precision, recursions+1); 
              // recurse for more precision
             } else {
-	std::cout << "int string pushing back: " << (x1+x2)/2 << std::endl;
+	//std::cout << "int string pushing back: " << (x1+x2)/2 << std::endl;
                 _roots.push_back((x1+x2)/2);
 		m.unlock();
             }

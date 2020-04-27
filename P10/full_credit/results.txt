@@ -1,71 +1,56 @@
 QUESTION 1: Which value of slices did you select for your machine to solve the polynomial with 1 thread with at least a 30 second runtime: 
-250000000 (34 seconds elapsed time)
+210000000 (30 seconds elapsed time)
 
 QUESTION 2: Provide the output of ``time polyb nn`` (or the improved version in the lecture video, if you prefer) for the following values of nn threads shown below:
 
 Example Timing:
-
 real	0m22.551s
 user	0m22.524s
 sys	0m0.012s
 
+YOUR Timing: 
 
-YOUR Timing:
+Without threads: 
+real	0m29.419s
+user	0m29.384s
+sys	0m0.009s
 
-Without threads:
-
-
-
-
-With 2 threads:
-
-
-
-
-
+With 2 threads: 
+real	0m15.210s
+user	0m29.411s
+sys	0m0.017s
 
 With 4 threads:
-
-
-
-
-
+real	0m14.754s
+user	0m29.394s
+sys	0m0.033s
 
 With 6 threads:
+real	0m15.203s
+user	0m30.157s
+sys	0m0.045s
 
+With 8 threads: 
+real	0m15.517s
+user	0m30.777s
+sys	0m0.073s
 
+With 12 threads: 
+real	0m15.555s
+user	0m30.925s
+sys	0m0.033s
 
-
-
-
-With 8 threads:
-
-
-
-
-
-
-With 12 threads:
-
-
-
-
-
-
-With 24 threads:
-
-
-
-
+With 24 threads: 
+real	0m15.428s
+user	0m30.549s
+sys	0m0.085s
 
 QUESTION 3: Does adding more threads continue to speed up the program? Do more threads ever slow down the program slightly?  Why or why not?
 
-
-
-
+Adding more threads for the most part speeds up the program to faster than the original timing without threads. Yes, there are occasions where more threads than a specific amount slows the program slightly, just like # 4 where 6 threads has a 7 second longer user time than #3 with 2 threads. I think the reason why more threads can slow down a program is because the many threads may wait for the thread before to finish a specific process before continuing their own, therefore we are left with a queue of threads waiting til completion of a specific thread before being able to continue til end. 
 
 QUESTION 4: Does adding more threads increase the "system load", or is it constant regardless of the number of threads?  Why?
 
-
+Adding threads does generally increase the system load. I think this is because the system has more work to do thus more of a load since there are more threads. 
 
 
