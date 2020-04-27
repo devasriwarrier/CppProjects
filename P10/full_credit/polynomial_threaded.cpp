@@ -43,37 +43,26 @@ double Polynomial::operator()(double x) {
 
 
 //void Polynomial::solve(double min, double max, int nthreads, double slices, double precision) {
- //   _roots = {};
-//  solve_recursive(min, max, 1, slices, precision);
+ //  _roots = {};
+  //solve_recursive(min, max, 1, slices, precision);
 //}
 
 void Polynomial::solve(double min, double max, int nthreads, double slices, double precision) {
     _roots = {};
     std::vector<std::thread*> threads;
-
     double range = max - min;
     double workPerThread = range/nthreads;
     double slicesPerThread = slices/nthreads;
-    for (int i = 0; i < nthreads; i++) {
-//attepmt 1
 
+    for (int i = 0; i < nthreads; i++) {
       double start = min + (workPerThread * i);
       double end = start + workPerThread;
+
       threads.push_back(new std::thread{[=]{this->solve_recursive(start, end, i, slicesPerThread, precision);}});
-   // std::cout << std::hex << "Task " << c << " has ID " << threads.back()->get_id() << std::endl;
-
-//attempt 2
-   // Polynomial& f = *this;
-    //threads.push_back(new std::thread{&Polynomial::solve_recursive, f, start, end, i, slicesPerThread, precision});
-//attepmt 3
-    //threads.push_back(new std::thread{[min, max, i, slices, precision] { Polynomial f; f.solve_recursive(min, end, i, slices, precision);}});
-
-        std::cout << std::hex << "Task " << i << " has start " << start << " has end "<< end << " has ID " << threads.back()->get_id() << std::endl; 
-    }
-    for (auto& t : threads) t->join();
+     // std::cout << std::hex << "Task " << i << " has start " << start << " has end "<< end << " has ID " << threads.back()->get_id(); 
+		} for (auto& t : threads) t->join(); 
 } 
 
-//where to start ans where to end searching. 
 // (Internal) recursive search for polynomial solutions
 void Polynomial::solve_recursive(double min, double max, int tid, double slices, double precision, int recursions) { 
     Polynomial& f = *this;
@@ -89,7 +78,7 @@ void Polynomial::solve_recursive(double min, double max, int tid, double slices,
             if((abs(f(x1+x2)/2) > precision) && ((x2 - x1) > precision) && (recursions < 20)) {
 		m.lock(); 
                 solve_recursive(x1, x2, tid, std::min(slices, (x2-x1)/precision), precision, recursions+1); 
-                                   // recurse for more precision
+             // recurse for more precision
             } else {
 	std::cout << "int string pushing back: " << (x1+x2)/2 << std::endl;
                 _roots.push_back((x1+x2)/2);
@@ -101,7 +90,7 @@ void Polynomial::solve_recursive(double min, double max, int tid, double slices,
         y1 = y2;
     }
 }
-// recurse for more precision . //solutions somewhere between x1 and x2 so call recursive again make x1 x2 as min max and solve further until precision is specified 
+ //solutions somewhere between x1 and x2 so call recursive again make x1 x2 as min max and solve further until precision is specified 
 //calls itself line 41 if precision is not high enough
 //FIX SOLVE, divide range min to max into threads that divide that range. EX 10 threads, min 0 max 10. create one thread looks from 0-1, another that looks 1-2, 2-3 and so on. each threads gets portion of range to search
 //divide slices by n threads so esch thread isnt searching same number of slices 
