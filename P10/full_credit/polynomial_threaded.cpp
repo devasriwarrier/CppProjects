@@ -59,26 +59,23 @@ void Polynomial::solve(double min, double max, int nthreads, double slices, doub
 
       double start = min + (workPerThread * i);
       double end = start + workPerThread;
-	m.lock();          
-      threads.push_back(new std::thread{[start, end, nthreads, slicesPerThread, precision] { Polynomial f; f.solve_recursive(start, end, nthreads, slicesPerThread, precision);}});
-       // std::cout << std::hex << "Task " << c << " has ID " << threads.back()->get_id() << std::endl;
-
+      threads.push_back(new std::thread{[=]{this->solve_recursive(start, end, i, slicesPerThread, precision);}});
+   // std::cout << std::hex << "Task " << c << " has ID " << threads.back()->get_id() << std::endl;
 
 //attempt 2
    // Polynomial& f = *this;
     //threads.push_back(new std::thread{&Polynomial::solve_recursive, f, start, end, i, slicesPerThread, precision});
 //attepmt 3
     //threads.push_back(new std::thread{[min, max, i, slices, precision] { Polynomial f; f.solve_recursive(min, end, i, slices, precision);}});
-	m.unlock();
-        std::cout << std::hex << "Task " << i << " has start " << start << " has end "<< end << " has ID " << threads.back()->get_id() << std::endl; //output shows same ID.. why?
-    }
 
+        std::cout << std::hex << "Task " << i << " has start " << start << " has end "<< end << " has ID " << threads.back()->get_id() << std::endl; 
+    }
     for (auto& t : threads) t->join();
 } 
 
 //where to start ans where to end searching. 
 // (Internal) recursive search for polynomial solutions
-void Polynomial::solve_recursive(double min, double max, int tid, double slices, double precision, int recursions) { //
+void Polynomial::solve_recursive(double min, double max, int tid, double slices, double precision, int recursions) { 
     Polynomial& f = *this;
     double delta = (max - min) / slices;
     double x1 = min;
@@ -88,14 +85,15 @@ void Polynomial::solve_recursive(double min, double max, int tid, double slices,
 
     while(x1 < max) {
         y2 = f(x2);
-        if(std::signbit(y1) != std::signbit(y2)) {
+        if(std::signbit(y1) != std::signbit(y2)) {         
             if((abs(f(x1+x2)/2) > precision) && ((x2 - x1) > precision) && (recursions < 20)) {
+		m.lock(); 
                 solve_recursive(x1, x2, tid, std::min(slices, (x2-x1)/precision), precision, recursions+1); 
-// recurse for more precision
+                                   // recurse for more precision
             } else {
-//problem 2 with data
 	std::cout << "int string pushing back: " << (x1+x2)/2 << std::endl;
                 _roots.push_back((x1+x2)/2);
+		m.unlock();
             }
         }
         x1 = x2; 
