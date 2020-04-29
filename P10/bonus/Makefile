@@ -1,4 +1,4 @@
-CXXFLAGS += --std=c++17
+CXXFLAGS += --std=c++17 -lpthread -pthread
 
 all: poly polyb polyt test
 

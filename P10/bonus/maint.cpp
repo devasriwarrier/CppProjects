@@ -6,7 +6,8 @@
 #include <thread>
 #include <vector>
 #include <mutex>
-
+#include <thread>
+#include <pthread.h>
 int main() {
     // BONUS: Modify main() to load and solve multiple polynomials
     //    simultaneously using a set of threads for each polynomial.
@@ -19,6 +20,7 @@ int main() {
     Polynomial f;
     int choice;
     std::vector<Polynomial*> poly;
+ 	   std::vector<std::thread*> threadz;
 
     // Load a default polynomial if available
     std::string filename = "untitled.poly";
@@ -106,19 +108,18 @@ int main() {
 	   // f.solve(c, e, nthreads); //solve polynomials at index i!!
 	  //  }
 
-	for(int i =0; i < poly.size(); i++){
-	    	Polynomial P = *poly[i];
-	   	P.solve(c, e, nthreads); //solve polynomials at index i!!
-	    }
+	for (int i =0; i < poly.size(); i++){
+		Polynomial *P = poly[i];
+		threadz.push_back(new std::thread{[=] {P->solve(e, c, nthreads);}});
+	}for (auto& t : threadz) t->join(); 
 
-          //  f.solve(c, e, nthreads);
             auto stop = std::chrono::high_resolution_clock::now();
             LOG("   MAIN: Solved!");
             std::cout << "Elapsed time: " << std::chrono::duration_cast<std::chrono::seconds>(stop - start).count() << " seconds\n";
 
 		for(int i=0; i<poly.size(); i++){
 	    	Polynomial P = *poly[i];
-            std::vector<double> roots = P.roots();
+            std::vector<double> roots = f.roots();
 	if(roots.empty()) {
                 std::cout << "No roots found!\n";
             } else {
