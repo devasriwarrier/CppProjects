@@ -97,30 +97,29 @@ int main() {
                 std::cout << "f(" << x << ") = " << f(x) << std::endl;
             } while (x != 0.0);
        } else if(choice == 4) {
-            std::cout << "Solve between min max (== exits): ";
+std::cout << "Solve between min max (== exits): ";
             std::cin >> c >> e; if(c >= e) break;
             std::cout << "Number of threads: ";
             std::cin >> nthreads;
             LOG("   MAIN: Ready to solve");
             auto start = std::chrono::high_resolution_clock::now(); 
-
-	   // for(auto it = poly.begin(); it != poly.end(); ++it){
-	   // f.solve(c, e, nthreads); //solve polynomials at index i!!
-	  //  }
-
+           // f.solve(c, e, nthreads);
+//new code*********************************************************************************
 	for (int i =0; i < poly.size(); i++){
 		Polynomial *P = poly[i];
 		threadz.push_back(new std::thread{[=] {P->solve(e, c, nthreads);}});
+	 	std::cout << std::hex << " has ID MAIN" << threadz.back()->get_id() << std::endl; 
 	}for (auto& t : threadz) t->join(); 
-
+//new code*********************************************************************************
             auto stop = std::chrono::high_resolution_clock::now();
             LOG("   MAIN: Solved!");
             std::cout << "Elapsed time: " << std::chrono::duration_cast<std::chrono::seconds>(stop - start).count() << " seconds\n";
-
-		for(int i=0; i<poly.size(); i++){
+	for(int i=1; i<poly.size(); i++){
+std::cout << std::hex << "Task "<<std::endl;
 	    	Polynomial P = *poly[i];
-            std::vector<double> roots = f.roots();
-	if(roots.empty()) {
+            std::vector<double> roots = poly[i]->roots(); //why dont we go into solve_recursive function??? this is why roots vector is EMPTY!
+
+             if(roots.empty()) {
                 std::cout << "No roots found!\n";
             } else {
                 std::ios cout_state(nullptr);
@@ -129,14 +128,14 @@ int main() {
 
                 std::cout << "\nx = \n";
                 for(double r : roots) {
-                    std::cout << "    " << std::setw(21) << r << " f(x) = " << std::setw(21) << f(r) << std::endl; //print out all polynomials in
+                    std::cout << "    " << std::setw(21) << r << " f(x) = " << std::setw(21) << P(r) << std::endl;
                 }
                 std::cout.copyfmt(cout_state);
             }
 }
-            
         } else {
             if(choice != 0) std::cerr << "INVALID CHOICE\n";
         }
     } while(choice != 0);
+
 }

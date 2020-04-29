@@ -39,9 +39,8 @@ void Polynomial::solve(double min, double max, int nthreads, double slices, doub
       double end = start + workPerThread;
 
       threads.push_back(new std::thread{[=]{this->solve_recursive(start, end, i, slicesPerThread, precision);}}); 
-std::cout << _terms[1] << std::endl;
 std::cout << std::hex << "Task " << i << " has start " << start << " has end "<< end << " has ID " << threads.back()->get_id() << std::endl; 
-		} for (auto& t : threads) t->join(); 
+		} for (auto& t : threads) t->join();
 } 
 
 void Polynomial::solve_recursive(double min, double max, int tid, double slices, double precision, int recursions) { 
@@ -53,15 +52,17 @@ void Polynomial::solve_recursive(double min, double max, int tid, double slices,
     double y2;
 
     while(x1 < max) {
+std::cout << "Are we here inside this function?" << std::endl;
         y2 = f(x2);
         if(std::signbit(y1) != std::signbit(y2)) {         
             if((abs(f(x1+x2)/2) > precision) && ((x2 - x1) > precision) && (recursions < 20)) {
 		m.lock(); 
                 solve_recursive(x1, x2, tid, std::min(slices, (x2-x1)/precision), precision, recursions+1); 
-		m.unlock();
+             // recurse for more precision
             } else {
-std::cout << "int string pushing back: " << (x1+x2)/2 << std::endl;
+	//std::cout << "int string pushing back: " << (x1+x2)/2 << std::endl;
                 _roots.push_back((x1+x2)/2);
+		m.unlock();
             }
         }
         x1 = x2; 
