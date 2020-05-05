@@ -25,8 +25,8 @@ Cart& operator=(const Cart& cart);
 
 typedef std::vector<Item*>::iterator iterator;
 typedef std::vector<Item*>::const_iterator const_iterator;
-std::vector<Item*>::iterator begin();
-std::vector<Item*>::iterator end();
+iterator begin();
+iterator end();
 
 private:
 std::string _customer;
