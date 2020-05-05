@@ -16,7 +16,7 @@ class custom_exception:public std::exception{
 public:
 custom_exception(std::string s, std::string t){
  _msg = "Invalid price shown: |'"+s+"\' ==> "+"\'"+t+"\'"'}
-const char* what() const nonexception override{
+const char* what() const noexcept override{
 return _msg.c_str();}
 private: std::string _msg;};
 
@@ -24,7 +24,6 @@ private: std::string _msg;};
 std::istream& operator>>(std::istream& ist, Item& item){
 std::string value;
 double Price;
-
 std::getline(ist, value);
 
 try{
