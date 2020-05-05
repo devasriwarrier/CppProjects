@@ -25,7 +25,11 @@ totalcost+= _items[j]->cost();
 j++;}
 return totalcost;}
 
-Cart& Cart::operator=(const Cart& cart){};
+Cart& Cart::operator=(const Cart& cart){
+_customer = cart._customer;
+for(Item* i : cart._items) _items.push_back(new Item{*i});
+return *this;
+if(this == &cart) return *this;}; //do nothing
 
 void Cart::add_item(Item& item){_items.push_back(new Item{item});}
 
