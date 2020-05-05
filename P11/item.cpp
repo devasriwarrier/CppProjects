@@ -10,15 +10,7 @@ Item(std::string name, double price): _name{name}, _price{price};
 
 double cost(){ return _price;}
 
-std::ostream& operator<<(std::ostream& ost,Item item){ ost << "$" << std::setprecision(2) << item._price << " " << item._name;}
-//from prof example code
-class custom_exception:public std::exception{
-public:
-custom_exception(std::string s, std::string t){
- _msg = "Invalid price shown: |'"+s+"\' ==> "+"\'"+t+"\'"'}
-const char* what() const exception override{
-return _msg.c_str();}
-private: std::string _msg;};
+std::ostream& operator<<(std::ostream& ost, const Item& item){ ost << "$" << item._price << " " << item._name;}
 
 
 std::istream& operator>>(std::istream& ist, Item& item){

@@ -12,7 +12,7 @@ public:
 
 Cart(std::string customer);
 
-~Cart();
+virtual ~Cart();
 
 Cart(const Cart& cart);
 
@@ -23,8 +23,8 @@ void add_item(Item& item);
 
 Cart& operator=(const Cart& cart);
 
- 
-
+typedef std::vector<Item*>::iterator iterator;
+typedef std::vector<Item*>::const_iterator const_iterator;
 std::vector<Item*>::iterator begin();
 std::vector<Item*>::iterator end();
 
