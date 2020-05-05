@@ -3,6 +3,8 @@
 #include <string>
 #include <iostream>
 #include <iomanip>
+#include <iterator>
+#include <vector>
 
 Cart::Cart(std::string customer): _customer{customer}{};
 

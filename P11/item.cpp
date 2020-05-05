@@ -3,6 +3,8 @@
 #include <string>
 #include <iostream>
 #include <iomanip>
+#include <iterator>
+#include <vector>
 
 Item(std::string name, double price): _name{name}, _price{price};
 
