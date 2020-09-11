@@ -1,2 +1,2 @@
 # cse1325
-final version of this repository! 
+This is code from my Object Oriented Programming class in C++!
